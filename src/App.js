@@ -3,15 +3,14 @@ import NewEmployeeForm from './components/NewEmployeeForm';
 import './styles/App.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Illustration from './components/Illustration';
+
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Header from './components/Header';
+import EmployeeList from './components/EmployeeList';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 
 
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';/* 
-import GroupIcon from '@mui/icons-material/Group';
-import MoodIcon from '@mui/icons-material/Mood';
-import PersonPinIcon from '@mui/icons-material/PersonPin'; */
 
 
 /* const darkTheme = createTheme({
@@ -40,18 +39,21 @@ const customTheme = createTheme({
 
 function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <ThemeProvider theme={customTheme}>
-      <h1><EmojiPeopleIcon sx={{margin: '10px', marginBottom: '-5px', fontSize: '40px'}} />HRnet</h1>
-      <main>
-        <div className="App">
-          <CssBaseline enableColorScheme />
-          <NewEmployeeForm />
-        </div>
-        <Illustration />
-      </main>
-    </ThemeProvider>
-    </LocalizationProvider>
+    <div className="App">
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <ThemeProvider theme={customTheme}>
+            <CssBaseline enableColorScheme />
+            <Header />
+            <Routes>
+              <Route index element={<NewEmployeeForm />} />
+              <Route path="/employee-list" element={<EmployeeList />} />
+              <Route path="*" element={<NewEmployeeForm />} />
+            </Routes>
+          </ThemeProvider>
+        </LocalizationProvider>
+      </BrowserRouter>
+    </div>
   );
 }
 
