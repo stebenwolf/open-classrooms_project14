@@ -5,14 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function Department() {
-    const [department, setDepartment] = React.useState('');
+export default function Department(props) {
+    
+    const {department, setDepartment} = props;
     
     const inputDepartment = React.useRef();
-    
-    const handleChange = (event) => {
-        setDepartment(event.target.value);
-    };
+
     return (
         <div>
             <FormControl sx={{ m: 1, minWidth: '42ch' }}>
@@ -22,7 +20,7 @@ export default function Department() {
                     id="demo-simple-select-helper"
                     value={department}
                     label="Department *"
-                    onChange={handleChange}
+                    onChange={(event) => setDepartment(event.target.value)}
                     ref={inputDepartment}
                 >
                     <MenuItem value='Engineering'>Engineering</MenuItem>

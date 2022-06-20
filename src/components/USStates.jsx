@@ -1,8 +1,9 @@
+// @ts-nocheck
 import * as React from 'react';
 import { TextField } from '@mui/material';
 import { Autocomplete } from '@mui/material';
 
-export default function ComboBox() {
+export default function USStates(props) {
     const options = states.map((option) => {
         const firstLetter = option.name[0].toUpperCase();
         return {
@@ -11,6 +12,8 @@ export default function ComboBox() {
         };
     });
 
+    const {uSState, setUSState} = props;
+
     return (
         <Autocomplete
             disablePortal
@@ -18,8 +21,14 @@ export default function ComboBox() {
             options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
             groupBy={(option) => option.firstLetter}
             getOptionLabel={(option) => option.name}
-            /* sx={{ width: 300 }} */
-            renderInput={(params) => <TextField {...params} label="State" sx={{ m: 1, minWidth: '15ch' }}/>}
+            onChange={(event) => setUSState(event.target.textContent)}
+            renderInput={(params) => 
+                <TextField 
+                    {...params} 
+                    label="State" 
+                    sx={{ m: 1, minWidth: '15ch' }}
+                />}
+            
         />
     );
 }

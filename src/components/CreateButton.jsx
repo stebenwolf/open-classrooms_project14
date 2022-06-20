@@ -8,23 +8,64 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import { useNavigate } from 'react-router-dom';
 
-export default function CreateButton() {
+import { useDispatch } from 'react-redux/es/exports';
+import { setNewEmployee } from '../features/employeeSlice';
+import { addNewEmployee } from '../features/listSlice';
+
+export default function CreateButton({employee}) {
 
     const [openDialog, setOpenDialog] = React.useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDialogOpen = () => {
         setOpenDialog(true);
     }
 
-    const handleDialogClose = () => {
+    const handleDialogClose = (e, type) => {
+        let target;
+        switch (type) {
+            case "new":
+                target = "/";
+                break;
+            case "list":
+                target = "employee-list";
+                break;
+            default:
+                console.error("unknown target");
+        }
+        e.preventDefault();
+        onAddNewEmployeeClicked({employee})
+        navigate(`../${target}`, { replace: false });
         setOpenDialog(false);
     }
+
+    const onAddNewEmployeeClicked = ({employee}) => {
+        if (employee) {
+            dispatch(setNewEmployee(employee));
+            dispatch(addNewEmployee(employee))
+        }
+    }
+
 
 
     return (
         <Stack direction="row" spacing={2}>
-            <Button variant="outlined" startIcon={<DeleteIcon />} size="large">
+            <Button 
+                variant="outlined" 
+                startIcon={<DeleteIcon />} 
+                sx={{
+                    color: 'rgb(147, 173, 24)', 
+                    borderColor: 'rgb(147, 173, 24)',
+                    '&:hover': {
+                        borderColor: 'rgb(147, 173, 24)',
+                        backgroundColor: 'rgb(147, 173, 24, 0.3)'
+                    }
+                }} 
+                size="large"
+            >
                 Reset
             </Button>      
             <Button 
@@ -32,6 +73,13 @@ export default function CreateButton() {
                 startIcon={<PersonAddAlt1Icon />} 
                 size="large"
                 onClick={handleDialogOpen}
+                sx={{
+                    backgroundColor: 'rgb(147, 173, 24)', 
+                    '&:hover': {
+                        color: 'white',
+                        backgroundColor: 'rgb(110, 133, 16)',
+                    }
+                }}
             >
                 Create Employee
             </Button>
@@ -50,10 +98,11 @@ export default function CreateButton() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDialogClose}>Add Another Employee</Button>
-                    <Button onClick={handleDialogClose} autoFocus>
-                        View Current Employees
+                    <Button onClick={(e) => handleDialogClose(e, "new")}>Add Another Employee</Button> 
+                    <Button href="/employee-list"  onClick={(e) => handleDialogClose(e, "list")} autoFocus>
+                            View Current Employees
                     </Button>
+                        
                 </DialogActions>
             </Dialog>
         </Stack>
