@@ -33,7 +33,7 @@ export default function Header() {
             <Box className="logo" sx={{ m:2 }}>
                 <Link href="/" underline='none' color='inherit' onClick={handleClickHome}>    
                 <h1>
-                    <img src={logo} alt='logo' />
+                    <img src={logo} alt='logo' width="80px" height="80px" />
 HRnet
                 </h1>
                 </Link>
