@@ -23,6 +23,7 @@ export default function Department(props) {
                     onChange={(event) => setDepartment(event.target.value)}
                     ref={inputDepartment}
                 >
+                    <MenuItem value="" disabled>None</MenuItem>
                     <MenuItem value='Engineering'>Engineering</MenuItem>
                     <MenuItem value='Human Resources'>Human Resources</MenuItem>
                     <MenuItem value='Legal'>Legal</MenuItem>

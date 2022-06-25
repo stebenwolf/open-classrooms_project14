@@ -20,7 +20,7 @@ export default function USStates(props) {
             id="combo-box"
             options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
             groupBy={(option) => option.firstLetter}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
             onChange={(event) => setUSState(event.target.textContent)}
             renderInput={(params) => 
                 <TextField 
