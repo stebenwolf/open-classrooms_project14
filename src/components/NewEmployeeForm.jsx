@@ -10,22 +10,22 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Grid from "@mui/material/Grid";
 import Illustration from './Illustration';
-import { useSelector } from "react-redux";
 import '../styles/NewEmployee.css';
 
 export default function NewEmployeeForm() {
-    const employee = useSelector(state => state.employee);
 
-    const [firstName, setFirstName] = useState(employee.firstName);
-    const [lastName, setLastName] = useState(employee.lastName);
+    // One state for each input field
+    const [firstName, setFirstName] = useState(undefined);
+    const [lastName, setLastName] = useState(undefined);
     const [birthDate, setBirthDate] = useState(null);
-    const [addressStreet, setAddressStreet] = useState(employee.addressStreet);
-    const [addressCity, setAddressCity] = useState(employee.addressCity);
-    const [addressState, setAddressState] = useState(employee.addressState);
-    const [addressZip, setAddressZip] = useState(employee.addressZip);
-    const [companyDepartment, setCompanyDepartment] = useState(employee.companyDepartment);
+    const [addressStreet, setAddressStreet] = useState(undefined);
+    const [addressCity, setAddressCity] = useState(undefined);
+    const [addressState, setAddressState] = useState(undefined);
+    const [addressZip, setAddressZip] = useState(undefined);
+    const [companyDepartment, setCompanyDepartment] = useState(undefined);
     const [companyStartDate, setCompanyStartDate] = useState(null);
 
+    // One method for each input field
     const handleFirstNameChanged = (e) => setFirstName(e.target.value);
     const handleLastNameChanged = (e) => setLastName(e.target.value);
     const handleBirthChange = (date) => {
@@ -37,9 +37,10 @@ export default function NewEmployeeForm() {
     const handleZipChange = (e) => setAddressZip(e.target.value);
     const handleStartChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
-        setCompanyStartDate(shortenDate);}
+        setCompanyStartDate(shortenDate);
+    }
 
-    
+    // now we create an object with all the data gathered
     let employeeInfos = {
         "firstName": firstName,
         "lastName": lastName,
@@ -52,7 +53,7 @@ export default function NewEmployeeForm() {
         "companyStartDate": companyStartDate    
     }
 
-
+    const [formReset, setFormReset] = useState(false);
     
     return (
         <div className="newEmployee">
@@ -76,6 +77,7 @@ export default function NewEmployeeForm() {
                                 label="First Name" 
                                 variant="outlined" 
                                 onChange={(e) => handleFirstNameChanged(e)}
+                                onReset={(e) => handleFirstNameChanged(e)}
                             />
                         </Grid>
                         <Grid item>
@@ -85,6 +87,7 @@ export default function NewEmployeeForm() {
                                 label="Last Name" 
                                 variant="outlined" 
                                 onChange={handleLastNameChanged}
+                                onReset={handleLastNameChanged}
                             />
                         </Grid>
                         <Grid item>
@@ -95,7 +98,7 @@ export default function NewEmployeeForm() {
                                     inputFormat="MM/dd/yyyy"
                                     value={birthDate}
                                     onChange={handleBirthChange}
-                                    
+                                    onReset={handleBirthChange}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
@@ -114,6 +117,7 @@ export default function NewEmployeeForm() {
                                 variant="outlined" 
                                 sx={{ m: 1, minWidth: '63.5ch' }}
                                 onChange={handleStreetChange}
+                                onReset={handleStreetChange}
                             />
                         </Grid>
                         
@@ -125,6 +129,7 @@ export default function NewEmployeeForm() {
                                 variant="outlined" 
                                 sx={{ m: 1, minWidth: '20ch' }}
                                 onChange={handleCityChange}
+                                onReset={handleCityChange}
                             />
                         </Grid>
 
@@ -140,9 +145,9 @@ export default function NewEmployeeForm() {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                /* variant="filled" */
                                 placeholder="e.g. 1234"
                                 onChange={handleZipChange}
+                                onReset={handleZipChange}
                             />
                         </Grid>
                     </Grid>
@@ -161,6 +166,7 @@ export default function NewEmployeeForm() {
                                     inputFormat="MM/dd/yyyy"
                                     value={companyStartDate}
                                     onChange={handleStartChange}
+                                    onReset={handleStartChange}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
@@ -170,7 +176,7 @@ export default function NewEmployeeForm() {
                 <div className="employee-button">
                     <Grid container={true} sx={{justifyContent: 'center', marginTop: 4}}>
                         <Grid item>
-                            <CreateButton employee={employeeInfos} />
+                            <CreateButton employee={employeeInfos} setReset = {setFormReset} />
                         </Grid>
                     </Grid>
                 </div>
