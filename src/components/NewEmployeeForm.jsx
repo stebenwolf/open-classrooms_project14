@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import USStates from "./USStates";
+/* import USStates from "./USStates"; */
 import Department from "./Department";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -19,10 +19,14 @@ import { useDispatch } from 'react-redux/es/exports';
 import { setNewEmployee } from '../features/employeeSlice';
 import { addNewEmployee } from '../features/listSlice';
 
+import { Autocomplete } from '@mui/material';
+import states from "../assets/data/states.json";
+
+
 //import Modal from './Modal';
 import ModalContent from "./ModalContent";
-
 import { Modal } from "@stebenwolf/react-modal";
+
 
 export default function NewEmployeeForm() {
 
@@ -67,6 +71,15 @@ export default function NewEmployeeForm() {
         "companyStartDate": companyStartDate    
     }
 
+    const stateOptions = states.map((option) => {
+        const firstLetter = option.name[0].toUpperCase();
+        return {
+            firstLetter,
+            ...option,
+        };
+    });
+
+    /* const {uSState, setUSState} = props; */
 
     const [reset, setReset] = useState(false);
     const [fullForm, setFullForm] = useState(false);
@@ -207,7 +220,21 @@ export default function NewEmployeeForm() {
                         </Grid>
 
                         <Grid item>
-                            <USStates uSState = {addressState} setUSState = {setAddressState} />
+                            <Autocomplete
+                                disablePortal
+                                id="combo-box"
+                                options={stateOptions.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                groupBy={(option) => option.firstLetter}
+                                getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
+                                onChange={(event) => setAddressState(event.target.textContent)}
+                                renderInput={(params) => 
+                                    <TextField 
+                                        {...params} 
+                                        label="State" 
+                                        sx={{ m: 1, minWidth: '15ch' }}
+                                />}
+                            />
+                            {/* <USStates uSState = {addressState} setUSState = {setAddressState} /> */}
                         </Grid>
                         
                         <Grid item>
