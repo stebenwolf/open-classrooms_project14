@@ -1,7 +1,5 @@
 // @ts-nocheck
 import React, { useState } from "react";
-/* import USStates from "./USStates"; */
-import Department from "./Department";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -19,9 +17,13 @@ import { useDispatch } from 'react-redux/es/exports';
 import { setNewEmployee } from '../features/employeeSlice';
 import { addNewEmployee } from '../features/listSlice';
 
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, FormHelperText } from '@mui/material';
 import states from "../assets/data/states.json";
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 //import Modal from './Modal';
 import ModalContent from "./ModalContent";
@@ -85,8 +87,7 @@ export default function NewEmployeeForm() {
     const [fullForm, setFullForm] = useState(false);
 
     const onAddNewEmployeeClicked = (employee) => {
-        //if (fullForm) {
-        if (1) {
+        if (fullForm) {
             dispatch(setNewEmployee(employee));
             dispatch(addNewEmployee(employee))
         } else {
@@ -98,18 +99,27 @@ export default function NewEmployeeForm() {
         setReset(true);
     }
 
-
     // Managing modal's state
     const [modal, setModal] = useState(false);
     
     // what happens when we click on the "create employee" button
     const toggleModal = (e) => {
         e.preventDefault();
-        //if (firstName && lastName && birthDate) {
-        if(true) {
+        if(firstName && lastName && birthDate && addressStreet && addressCity && addressState && addressZip && companyDepartment && companyStartDate) {
             setFullForm(true);
-        } 
-        if (true) {
+        } else {
+            setFullForm(false);
+            if (firstName) {setFirstNameError(false)} else {setFirstNameError(true)};
+            if (lastName) {setLastNameError(false)} else {setLastNameError(true)};
+            if (birthDate) {setBirthDateError(false)} else {setBirthDateError(true)};
+            if (addressStreet) {setAddressStreetError(false)} else {setAddressStreetError(true)};
+            if (addressCity) {setAddressCityError(false)} else {setAddressCityError(true)};
+            if (addressState) {setAddressStateError(false)} else {setAddressStateError(true)};
+            if (addressZip) {setAddressZipError(false)} else {setAddressZipError(true)};
+            if (companyDepartment) {setCompanyDepartmentError(false)} else {setCompanyDepartmentError(true)};
+            if (companyStartDate) {setCompanyStartDateError(false)} else {setCompanyStartDateError(true)};
+        }
+        if (fullForm) {
             onAddNewEmployeeClicked(employeeInfos) // we create the employee
             setModal(!modal); // then we display the modal
             handleReset(); // finally we reset the form
@@ -121,13 +131,17 @@ export default function NewEmployeeForm() {
     }
 
     // field error
-    const [firstNameError, setFirstNameError, lastNameError, setLastNameError, birthDateError, setBirthDateError, addressStreetError, setAddressStreetError, addressCityError, setAddressCityError, addressStateError, setAddressStateError, addressZipError, setAddressZipError, companyDepartmentError, setCompanyDepartmentError, companyStartDateError, setCompanyStartDateError] = useState(false);
-    const errorText = "Invalid field";
-
-
-    const [formReset, setFormReset] = useState(false);
-
+    const [firstNameError, setFirstNameError] = useState(false);
+    const [lastNameError, setLastNameError] = useState(false);
+    const [birthDateError, setBirthDateError] = useState(false);
+    const [addressStreetError, setAddressStreetError] = useState(false);
+    const [addressCityError, setAddressCityError] = useState(false);
+    const [addressStateError, setAddressStateError] = useState(false);
+    const [addressZipError, setAddressZipError] = useState(false);
+    const [companyDepartmentError, setCompanyDepartmentError] = useState(false);
+    const [companyStartDateError, setCompanyStartDateError] = useState(false);
     
+    const [formReset, setFormReset] = useState(false);
     
     return (
         <div className="newEmployee">
@@ -154,8 +168,8 @@ export default function NewEmployeeForm() {
                                 variant="outlined" 
                                 onChange={(e) => handleFirstNameChanged(e)}
                                 onReset={(e) => handleFirstNameChanged(e)}
-                                /* error={firstNameError}
-                                helperText={errorText} */
+                                error={firstNameError}
+                                helperText={firstNameError === true ? 'Empty field!' : ' '}
                             />
                         </Grid>
                         <Grid item>
@@ -166,8 +180,8 @@ export default function NewEmployeeForm() {
                                 variant="outlined" 
                                 onChange={handleLastNameChanged}
                                 onReset={handleLastNameChanged}
-                                /* error={lastNameError}
-                                helperText={errorText} */
+                                error={lastNameError}
+                                helperText={lastNameError === true ? 'Empty field!' : ' '}
                             />
                         </Grid>
                         <Grid item>
@@ -179,8 +193,9 @@ export default function NewEmployeeForm() {
                                     value={birthDate}
                                     onChange={handleBirthChange}
                                     onReset={handleBirthChange}
-                                    renderInput={(params) => <TextField {...params} /* error={firstNameError}
-                                    helperText={errorText} */ />}
+                                    renderInput={(params) => <TextField {...params} 
+                                    error={birthDateError}
+                                    helperText={birthDateError === true ? 'Empty field!' : " "} />}
                                     
                                 />
                             </LocalizationProvider>
@@ -200,8 +215,8 @@ export default function NewEmployeeForm() {
                                 sx={{ m: 1, minWidth: '63.5ch' }}
                                 onChange={handleStreetChange}
                                 onReset={handleStreetChange}
-                                /* error={firstNameError}
-                                    helperText={errorText} */
+                                error={addressStreetError}
+                                helperText={addressStreetError ? 'Empty field!' : " "}
                             />
                         </Grid>
                         
@@ -214,8 +229,8 @@ export default function NewEmployeeForm() {
                                 sx={{ m: 1, minWidth: '20ch' }}
                                 onChange={handleCityChange}
                                 onReset={handleCityChange}
-                                /* error={firstNameError}
-                                    helperText={errorText} */
+                                error={addressCityError}
+                                helperText={addressCityError ? 'Empty field!' : " " }
                             />
                         </Grid>
 
@@ -232,6 +247,8 @@ export default function NewEmployeeForm() {
                                         {...params} 
                                         label="State" 
                                         sx={{ m: 1, minWidth: '15ch' }}
+                                        error={addressStateError}
+                                        helperText={addressStateError ? 'Empty field!' : " " }
                                 />}
                             />
                             {/* <USStates uSState = {addressState} setUSState = {setAddressState} /> */}
@@ -248,8 +265,8 @@ export default function NewEmployeeForm() {
                                 placeholder="e.g. 1234"
                                 onChange={handleZipChange}
                                 onReset={handleZipChange}
-                                /* error={firstNameError}
-                                    helperText={errorText} */
+                                error={addressZipError}
+                                helperText={addressZipError ? 'Empty field!' : " " }
                             />
                         </Grid>
                     </Grid>
@@ -258,7 +275,27 @@ export default function NewEmployeeForm() {
                     <h4>Company</h4>
                     <Grid container>
                         <Grid item>
-                            <Department department = {companyDepartment} setDepartment = {setCompanyDepartment} />
+                            <FormControl sx={{ m: 1, minWidth: '42ch' }} error={companyDepartmentError}>
+                                <InputLabel required id="demo-simple-select-helper-label" variant='outlined'
+                                >Department</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-helper-label"
+                                    id="demo-simple-select-helper"
+                                    value={companyDepartment}
+                                    label="Department *"
+                                    onChange={(event) => setCompanyDepartment(event.target.value)}
+                                    
+                                >
+                                    <MenuItem value="" disabled>None</MenuItem>
+                                    <MenuItem value='Engineering'>Engineering</MenuItem>
+                                    <MenuItem value='Human Resources'>Human Resources</MenuItem>
+                                    <MenuItem value='Legal'>Legal</MenuItem>
+                                    <MenuItem value='Marketing'>Marketing</MenuItem>
+                                    <MenuItem value='Sales'>Sales</MenuItem>
+                                </Select>
+                                {companyDepartmentError && <FormHelperText>Empty field!</FormHelperText>}
+                            </FormControl>
+                            {/* <Department department = {companyDepartment} setDepartment = {setCompanyDepartment} /> */}
                         </Grid>
                         <Grid item>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -269,8 +306,8 @@ export default function NewEmployeeForm() {
                                     value={companyStartDate}
                                     onChange={handleStartChange}
                                     onReset={handleStartChange}
-                                    renderInput={(params) => <TextField {...params} /* error={firstNameError}
-                                    helperText={errorText} */ />}
+                                    renderInput={(params) => <TextField {...params} error={companyStartDateError}
+                                    helperText={companyStartDateError ? 'Empty field!' : " " } />}
                                 />
                             </LocalizationProvider>
                         </Grid>
