@@ -34,3 +34,9 @@ header {
     flex-direction: row;
     align-items: center;
 }
+
+.navItem {
+    color: black !important;
+    padding: 8px !important;
+}
+

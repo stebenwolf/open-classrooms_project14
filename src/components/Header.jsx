@@ -53,13 +53,13 @@ HRnet
                     
                     <ButtonGroup variant="text" aria-label="text button group">
                         <Link href="/" onClick={handleClickHome}>
-                            <Button sx={{color: "black"}}>
-                                <PersonAddAlt1Icon sx={{color: "rgb(147, 173, 24)"}} />&nbsp;&nbsp;New Employee
+                            <Button className="navItem">
+                                <PersonAddAlt1Icon className="navItemIcon" sx={{color: "rgb(147, 173, 24)"}} />&nbsp;&nbsp;New Employee
                             </Button>
                         </Link>
                         <Link href="/employee-list" onClick={handleClickList}>
-                            <Button sx={{color: "black"}}>
-                                <DvrIcon sx={{color: "rgb(147, 173, 24)"}} />&nbsp;&nbsp;Current Employees
+                            <Button className="navItem">
+                                <DvrIcon className="navItemIcon" sx={{color: "rgb(147, 173, 24)"}} />&nbsp;&nbsp;Current Employees
                             </Button>
                         </Link>
                     </ButtonGroup>
