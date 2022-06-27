@@ -32,10 +32,8 @@ export default function ModalContent() {
                 target = "employee-list";
                 break;
             default:
-                /* console.error("unknown target"); */
         }
         e.preventDefault();
-        /* setModalOpen(false); */
         navigate(`../${target}`, { replace: false });
     }
     

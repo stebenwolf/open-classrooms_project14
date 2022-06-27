@@ -29,10 +29,9 @@ import ModalContent from "./ModalContent";
 import { Modal } from "@stebenwolf/react-modal";
 import { Controller, useForm } from "react-hook-form";
 
-
 export default function NewEmployeeForm() {
 
-    const {reset, register, handleSubmit, control, formState, formState:{errors, isSubmitSuccessful}} = useForm(
+    const {reset, register, getValues, handleSubmit, control, formState, formState:{errors, isSubmitSuccessful}} = useForm(
          {defaultValues: {
             firstName: undefined,
             lastName: undefined,
@@ -89,26 +88,20 @@ export default function NewEmployeeForm() {
     const dispatch = useDispatch();
 
     // One state for each input field
-    //const [firstName, setFirstName] = useState(undefined);
-    const [lastName, setLastName] = useState(undefined);
+    
     const [birthDate, setBirthDate] = useState(null);
-    const [addressStreet, setAddressStreet] = useState(undefined);
-    const [addressCity, setAddressCity] = useState(undefined);
-    const [addressState, setAddressState] = useState(undefined);
-    const [addressZip, setAddressZip] = useState(undefined);
-    const [companyDepartment, setCompanyDepartment] = useState("");
+    
+    //const [addressState, setAddressState] = useState(undefined);
+    
     const [companyStartDate, setCompanyStartDate] = useState(null);
 
     // One method for each input field
-    //const handleFirstNameChanged = (e) => setFirstName(e.target.value);
-    const handleLastNameChanged = (e) => setLastName(e.target.value);
+    
     const handleDateChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
         setBirthDate(shortenDate);
+        
     }
-    const handleStreetChange = (e) => setAddressStreet(e.target.value);
-    const handleCityChange = (e) => setAddressCity(e.target.value);
-    const handleZipChange = (e) => setAddressZip(e.target.value);
     const handleStartChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
         setCompanyStartDate(shortenDate);
@@ -129,6 +122,8 @@ export default function NewEmployeeForm() {
 
     // Managing modal's state
     const [modal, setModal] = useState(false);
+
+    //console.log(formState.dirtyFields);
     
     return (
         <div className="newEmployee">
@@ -170,21 +165,27 @@ export default function NewEmployeeForm() {
                                 helperText={errors.lastName?.message}
                             />
                         </Grid>
+                        
                         <Grid item>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
-                                    required
-                                    label="Birth date *"
-                                    inputFormat="MM/dd/yyyy"
                                     value={birthDate}
                                     control={control}
-                                    onChange={(date) => handleDateChange(date)}
-                                    renderInput={(params) => <TextField {...params} 
-                                    {...register("birthDate", birthDateValidators)}
-                                    error={errors.birthDate !== undefined}
-                                    helperText={errors.birthDate?.message}
-                                    
-                                    />}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => 
+                                        <TextField 
+                                            label="Birth date" 
+                                            variant="outlined" 
+                                            required 
+                                            type="date"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }} 
+                                            {...register("birthDate", birthDateValidators)} 
+                                            error={errors.birthDate !== undefined}
+                                            helperText={errors.birthDate?.message}
+                                        />
+                                    }
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -222,30 +223,31 @@ export default function NewEmployeeForm() {
 
                         <Grid item>
                             <Controller 
-                                name="addressState"
-                                control={control}
-                                
-                                render={({field}) => 
+                              name="addressState"
+                              control={control}
+                              render={({field}) => 
                                 <Autocomplete
-                                disablePortal
-                                id="combo-box"
-                                options={stateOptions.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
-                                groupBy={(option) => option.firstLetter}
-                                getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
-                                defaultValue={field.addressState}
-                                renderInput={(params) => 
+                                  disablePortal
+                                  onClose={() => formState.dirtyFields.addressState = true}
+                                  id="combo-box"
+                                  options={stateOptions.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                  groupBy={(option) => option.firstLetter}
+                                  getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
+                                  defaultValue={field.addressState}
+                                  renderInput={(params) => 
                                     <TextField 
                                         {...params} 
                                         label="State" 
-                                        
+                                        required
                                         sx={{ m: 1, minWidth: '15ch' }}
                                         {...register("addressState", addressStateValidators)}
                                         error={errors.addressState !== undefined}
                                         helperText={errors.addressState?.message}
-                                        />}
-                                        />
-                                    }
-                                    />
+                                    />}
+                                />
+                                }
+                              /> 
+                            {/* </FormControl> */}
                         </Grid>
                         
                         <Grid item>
@@ -307,17 +309,23 @@ export default function NewEmployeeForm() {
                         <Grid item>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DesktopDatePicker
-                                    required
-                                    label="Start date *"
-                                    inputFormat="MM/dd/yyyy"
                                     value={companyStartDate}
                                     control={control}
-                                    onChange={(date) => handleStartChange(date)}
-                                    renderInput={(params) => <TextField {...params} 
-                                    {...register("companyStartDate", companyStartDateValidators)}
-                                    error={errors.companyStartDate !== undefined}
-                                    helperText={errors.companyStartDate?.message}
-                                    />}
+                                    onChange={handleStartChange}
+                                    renderInput={(params) => 
+                                        <TextField 
+                                            label="Start date" 
+                                            variant="outlined" 
+                                            required 
+                                            type="date"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }} 
+                                            {...register("companyStartDate", companyStartDateValidators)} 
+                                            error={errors.companyStartDate !== undefined}
+                                            helperText={errors.companyStartDate?.message}
+                                        />
+                                    }
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -328,20 +336,20 @@ export default function NewEmployeeForm() {
                         <Grid item>
                             <Stack direction="row" spacing={2}>
                               <Button 
-                                      variant="outlined" 
-                                      startIcon={<DeleteIcon />} 
-                                      sx={{
-                                          color: 'rgb(147, 173, 24)', 
-                                          borderColor: 'rgb(147, 173, 24)',
-                                          '&:hover': {
-                                              borderColor: 'rgb(147, 173, 24)',
-                                              backgroundColor: 'rgb(147, 173, 24, 0.3)'
-                                          }
-                                      }} 
-                                      size="large"
-                                      type="reset"
+                                variant="outlined" 
+                                startIcon={<DeleteIcon />} 
+                                sx={{
+                                    color: 'rgb(147, 173, 24)', 
+                                    borderColor: 'rgb(147, 173, 24)',
+                                    '&:hover': {
+                                        borderColor: 'rgb(147, 173, 24)',
+                                        backgroundColor: 'rgb(147, 173, 24, 0.3)'
+                                    }
+                                }} 
+                                size="large"
+                                type="reset"
                               >
-                                      Reset
+                                Reset
                               </Button>      
                               <Button 
                                 variant="contained" 
@@ -355,9 +363,20 @@ export default function NewEmployeeForm() {
                                         backgroundColor: 'rgb(110, 133, 16)',
                                     }
                                 }}
+                                disabled={!formState.dirtyFields.firstName
+                                || !formState.dirtyFields.lastName
+                                || !formState.dirtyFields.birthDate
+                                || !formState.dirtyFields.addressStreet
+                                || !formState.dirtyFields.addressCity
+                                || !formState.dirtyFields.addressState
+                                || !formState.dirtyFields.addressZip
+                                || !formState.dirtyFields.companyDepartment
+                                || !formState.dirtyFields.companyStartDate }
                               >
                                 Create Employee
+                                
                               </Button>
+                              
                             </Stack>
                             {modal && <Modal 
                                 modalOpen={modal} 
@@ -370,6 +389,7 @@ export default function NewEmployeeForm() {
                     </Grid>
                 </div>
             </Box>
+            
             
             </div>
             <div className="newEmployeeIllustration">

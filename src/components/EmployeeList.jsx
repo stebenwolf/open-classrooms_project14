@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import SearchBar from 'material-ui-search-bar';
 import { useState } from 'react';
 
-import data from "../assets/data/fakeEmployees.json";
+import data from "../assets/data/fakeEmployeess.json";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -254,7 +254,6 @@ export default function EmployeeList() {
                   .map((row, index) => {
                   
                     const labelId = `enhanced-table-checkbox-${index}`;
-
                       return (
                         <TableRow
                           hover
