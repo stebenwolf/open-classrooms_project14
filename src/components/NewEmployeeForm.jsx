@@ -25,17 +25,71 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-//import Modal from './Modal';
 import ModalContent from "./ModalContent";
 import { Modal } from "@stebenwolf/react-modal";
+import { Controller, useForm } from "react-hook-form";
 
 
 export default function NewEmployeeForm() {
 
+    const {reset, register, handleSubmit, control, formState, formState:{errors, isSubmitSuccessful}} = useForm(
+         {defaultValues: {
+            firstName: undefined,
+            lastName: undefined,
+            birthDate: null,
+            addressStreet: undefined,
+            addressCity: undefined,
+            addressState: undefined,
+            addressZip: undefined,
+            companyDepartment: undefined,
+            companyStartDate: null
+         }}
+    );
+    const onSubmit= (data) => {
+        onAddNewEmployeeClicked(data) // we create the employee
+        setModal(!modal);
+        console.log(data);
+    }
+
+    const firstNameValidators = {
+        required:{value: true, message:'First name is required!'}
+    };
+    const lastNameValidators = {
+        required:{value: true, message:'Last name is required!'}
+    };
+    const birthDateValidators = {
+        required:{value: true, message:'Birth date is required!'}
+    };
+    const addressStreetValidators = {
+        required:{value: true, message:'Street is required!'}
+    };
+    const addressCityValidators = {
+        required:{value: true, message:'City is required!'}
+    };
+    const addressStateValidators = {
+        required:{value: true, message:'State is required!'}
+    };
+    const addressZipValidators = {
+        required:{value: true, message:'ZIP Code is required!'}
+    };
+    const companyDepartmentValidators = {
+        required:{value: true, message:'Department is required!'}
+    };
+    const companyStartDateValidators = {
+        required:{value: true, message:'Start date is required!'}
+    };
+
+    React.useEffect(() => {
+        if (formState.isSubmitSuccessful) {
+            reset();
+        }
+    }, [formState, reset])
+
+
     const dispatch = useDispatch();
 
     // One state for each input field
-    const [firstName, setFirstName] = useState(undefined);
+    //const [firstName, setFirstName] = useState(undefined);
     const [lastName, setLastName] = useState(undefined);
     const [birthDate, setBirthDate] = useState(null);
     const [addressStreet, setAddressStreet] = useState(undefined);
@@ -46,9 +100,9 @@ export default function NewEmployeeForm() {
     const [companyStartDate, setCompanyStartDate] = useState(null);
 
     // One method for each input field
-    const handleFirstNameChanged = (e) => setFirstName(e.target.value);
+    //const handleFirstNameChanged = (e) => setFirstName(e.target.value);
     const handleLastNameChanged = (e) => setLastName(e.target.value);
-    const handleBirthChange = (date) => {
+    const handleDateChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
         setBirthDate(shortenDate);
     }
@@ -61,7 +115,7 @@ export default function NewEmployeeForm() {
     }
 
     // now we create an object with all the data gathered
-    let employeeInfos = {
+    /* let employeeInfos = {
         "firstName": firstName,
         "lastName": lastName,
         "birthDate": birthDate,
@@ -71,7 +125,7 @@ export default function NewEmployeeForm() {
         "addressZip": addressZip,
         "companyDepartment": companyDepartment,
         "companyStartDate": companyStartDate    
-    }
+    } */
 
     const stateOptions = states.map((option) => {
         const firstLetter = option.name[0].toUpperCase();
@@ -81,32 +135,29 @@ export default function NewEmployeeForm() {
         };
     });
 
-    /* const {uSState, setUSState} = props; */
-
-    const [reset, setReset] = useState(false);
-    const [fullForm, setFullForm] = useState(false);
+    /* const [reset, setReset] = useState(false);
+    const [fullForm, setFullForm] = useState(true); */
 
     const onAddNewEmployeeClicked = (employee) => {
-        if (fullForm) {
-            dispatch(setNewEmployee(employee));
-            dispatch(addNewEmployee(employee))
-        } else {
-            console.error("infos manquantes");
-        }
+        dispatch(setNewEmployee(employee));
+        dispatch(addNewEmployee(employee))
     }
 
-    const handleReset = () => {
+    /* const handleReset = () => {
         setReset(true);
-    }
+    } */
 
     // Managing modal's state
     const [modal, setModal] = useState(false);
     
     // what happens when we click on the "create employee" button
-    const toggleModal = (e) => {
+    /* const toggleModal = (e) => {
         e.preventDefault();
         if(firstName && lastName && birthDate && addressStreet && addressCity && addressState && addressZip && companyDepartment && companyStartDate) {
             setFullForm(true);
+            onAddNewEmployeeClicked(employeeInfos) // we create the employee
+            setModal(!modal); // then we display the modal
+            
         } else {
             setFullForm(false);
             if (firstName) {setFirstNameError(false)} else {setFirstNameError(true)};
@@ -119,19 +170,10 @@ export default function NewEmployeeForm() {
             if (companyDepartment) {setCompanyDepartmentError(false)} else {setCompanyDepartmentError(true)};
             if (companyStartDate) {setCompanyStartDateError(false)} else {setCompanyStartDateError(true)};
         }
-        if (fullForm) {
-            onAddNewEmployeeClicked(employeeInfos) // we create the employee
-            setModal(!modal); // then we display the modal
-            handleReset(); // finally we reset the form
-            //setFirstNameError(false)
-        } else {
-            console.error("non");
-            //setFirstNameError(true);
-        }
-    }
+    } */
 
     // field error
-    const [firstNameError, setFirstNameError] = useState(false);
+    /* const [firstNameError, setFirstNameError] = useState(false);
     const [lastNameError, setLastNameError] = useState(false);
     const [birthDateError, setBirthDateError] = useState(false);
     const [addressStreetError, setAddressStreetError] = useState(false);
@@ -139,9 +181,9 @@ export default function NewEmployeeForm() {
     const [addressStateError, setAddressStateError] = useState(false);
     const [addressZipError, setAddressZipError] = useState(false);
     const [companyDepartmentError, setCompanyDepartmentError] = useState(false);
-    const [companyStartDateError, setCompanyStartDateError] = useState(false);
+    const [companyStartDateError, setCompanyStartDateError] = useState(false); */
     
-    const [formReset, setFormReset] = useState(false);
+    /* const [formReset, setFormReset] = useState(false); */
     
     return (
         <div className="newEmployee">
@@ -155,7 +197,8 @@ export default function NewEmployeeForm() {
                 }}
                 noValidate
                 autoComplete="off"
-                
+                onSubmit={handleSubmit(onSubmit)}
+                onReset={() => reset()}
             >
                 <div className="employee-basicInfos">
                     <h4>Basic Information</h4>
@@ -165,11 +208,14 @@ export default function NewEmployeeForm() {
                                 required 
                                 id="outlined-firstname" 
                                 label="First Name" 
-                                variant="outlined" 
-                                onChange={(e) => handleFirstNameChanged(e)}
-                                onReset={(e) => handleFirstNameChanged(e)}
-                                error={firstNameError}
-                                helperText={firstNameError === true ? 'Empty field!' : ' '}
+                                variant="outlined"
+                                //onChange={(e) => {}/* handleFirstNameChanged(e) */}
+                                /* onReset={(e) => handleFirstNameChanged(e)} */
+                                /* error={firstNameError}
+                                helperText={firstNameError === true ? 'Empty field!' : ' '} */
+                                {...register('firstName', firstNameValidators)}
+                                error={errors.firstName !== undefined}
+                                helperText={errors.firstName?.message}
                             />
                         </Grid>
                         <Grid item>
@@ -178,25 +224,71 @@ export default function NewEmployeeForm() {
                                 id="outlined-lastname" 
                                 label="Last Name" 
                                 variant="outlined" 
-                                onChange={handleLastNameChanged}
-                                onReset={handleLastNameChanged}
-                                error={lastNameError}
-                                helperText={lastNameError === true ? 'Empty field!' : ' '}
+                                //onChange={handleLastNameChanged}
+                                //onReset={handleLastNameChanged}
+                                /*error={lastNameError}
+                                helperText={lastNameError === true ? 'Empty field!' : ' '} */
+                                {...register('lastName', lastNameValidators)}
+                                error={errors.lastName !== undefined}
+                                helperText={errors.lastName?.message}
                             />
                         </Grid>
                         <Grid item>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
+                            {/* <Controller 
+                                    name="birthDate"
+                                    control={control}
+                                    defaultValue=''
+                                    render={({field}) => {
+                                        return <DesktopDatePicker
+                                        required
+                                        label="Date of Birth *"
+                                        inputFormat="MM/dd/yyyy"
+                                        value={birthDate}
+                                        onChange={(date) => handleDateChange(date)}
+                                        onReset={(e) => handleDateChange}
+                                        renderInput={(params) => <TextField {...params} 
+                                        
+                                        {...register('birthDate', birthDateValidators)}
+                                        error={errors.birthDate !== undefined}
+                                        helperText={errors.birthDate?.message}
+                                        value={field.value}
+                                        
+                                        />} 
+                                        
+                                    />
+                                    }}
+                                    /> */}
+                                {/* <DesktopDatePicker
                                     required
                                     label="Date of Birth *"
                                     inputFormat="MM/dd/yyyy"
                                     value={birthDate}
-                                    onChange={handleBirthChange}
-                                    onReset={handleBirthChange}
+                                    onChange={(date) => handleBirthChange(date)}
+                                    onReset={(e) => handleBirthChange}
                                     renderInput={(params) => <TextField {...params} 
-                                    error={birthDateError}
-                                    helperText={birthDateError === true ? 'Empty field!' : " "} />}
                                     
+                                    
+                                    {...register('birthDate', birthDateValidators)}
+                                    error={errors.birthDate !== undefined}
+                                    helperText={errors.birthDate?.message}
+                                    />} 
+                                    
+                                /> */}
+                                <DesktopDatePicker
+                                    required
+                                    label="Birth date *"
+                                    inputFormat="MM/dd/yyyy"
+                                    value={birthDate}
+                                    control={control}
+                                    onChange={(date) => handleDateChange(date)}
+                                    //onReset={handleDateChange}
+                                    renderInput={(params) => <TextField {...params} 
+                                    {...register("birthDate", birthDateValidators)}
+                                    error={errors.birthDate !== undefined}
+                                    helperText={errors.birthDate?.message}
+                                    
+                                    />}
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -213,10 +305,13 @@ export default function NewEmployeeForm() {
                                 label="Street" 
                                 variant="outlined" 
                                 sx={{ m: 1, minWidth: '63.5ch' }}
-                                onChange={handleStreetChange}
-                                onReset={handleStreetChange}
-                                error={addressStreetError}
-                                helperText={addressStreetError ? 'Empty field!' : " "}
+                                //onChange={handleStreetChange}
+                                //onReset={handleStreetChange}
+                                /* error={addressStreetError}
+                                helperText={addressStreetError ? 'Empty field!' : " "} */
+                                {...register('addressStreet', addressStreetValidators)}
+                                error={errors.addressStreet !== undefined}
+                                helperText={errors.addressStreet?.message}
                             />
                         </Grid>
                         
@@ -227,10 +322,13 @@ export default function NewEmployeeForm() {
                                 label="City" 
                                 variant="outlined" 
                                 sx={{ m: 1, minWidth: '20ch' }}
-                                onChange={handleCityChange}
-                                onReset={handleCityChange}
-                                error={addressCityError}
-                                helperText={addressCityError ? 'Empty field!' : " " }
+                                //onChange={handleCityChange}
+                                //onReset={handleCityChange}
+                                /* error={addressCityError}
+                                helperText={addressCityError ? 'Empty field!' : " " } */
+                                {...register("addressCity", addressCityValidators)}
+                                error={errors.addressCity !== undefined}
+                                helperText={errors.addressCity?.message}
                             />
                         </Grid>
 
@@ -241,17 +339,20 @@ export default function NewEmployeeForm() {
                                 options={stateOptions.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                                 groupBy={(option) => option.firstLetter}
                                 getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
-                                onChange={(event) => setAddressState(event.target.textContent)}
+                                //onChange={(event) => setAddressState(event.target.textContent)}
+                                
                                 renderInput={(params) => 
                                     <TextField 
                                         {...params} 
                                         label="State" 
                                         sx={{ m: 1, minWidth: '15ch' }}
-                                        error={addressStateError}
-                                        helperText={addressStateError ? 'Empty field!' : " " }
+                                        /* error={addressStateError}
+                                        helperText={addressStateError ? 'Empty field!' : " " } */
+                                        {...register("addressState", addressStateValidators)}
+                                        error={errors.addressState !== undefined}
+                                        helperText={errors.addressState?.message}
                                 />}
                             />
-                            {/* <USStates uSState = {addressState} setUSState = {setAddressState} /> */}
                         </Grid>
                         
                         <Grid item>
@@ -263,10 +364,13 @@ export default function NewEmployeeForm() {
                                     shrink: true,
                                 }}
                                 placeholder="e.g. 1234"
-                                onChange={handleZipChange}
-                                onReset={handleZipChange}
-                                error={addressZipError}
-                                helperText={addressZipError ? 'Empty field!' : " " }
+                                //onChange={handleZipChange}
+                                //onReset={handleZipChange}
+                                /* error={addressZipError}
+                                helperText={addressZipError ? 'Empty field!' : " " } */
+                                {...register("addressZip", addressZipValidators)}
+                                error={errors.addressZip !== undefined}
+                                helperText={errors.addressZip?.message}
                             />
                         </Grid>
                     </Grid>
@@ -275,16 +379,42 @@ export default function NewEmployeeForm() {
                     <h4>Company</h4>
                     <Grid container>
                         <Grid item>
-                            <FormControl sx={{ m: 1, minWidth: '42ch' }} error={companyDepartmentError}>
+                            <FormControl sx={{ m: 1, minWidth: '42ch' }} /* error={companyDepartmentError} */
+                            error={errors.companyDepartment !== undefined}
+                            >
                                 <InputLabel required id="demo-simple-select-helper-label" variant='outlined'
+                                
                                 >Department</InputLabel>
-                                <Select
+                                <Controller 
+                                    name="companyDepartment"
+                                    control={control}
+                                    defaultValue=''
+                                    render={({field}) => {
+                                        return <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        id="demo-simple-select-helper"
+                                        value={field.value/* companyDepartment */}
+                                        label="Department *"
+                                        //onChange={(event) => field.onChange(event.target.value) /* setCompanyDepartment(event.target.value) */}
+                                        {...register("companyDepartment", companyDepartmentValidators)}
+                                        
+                                    >
+                                        <MenuItem value="" disabled>None</MenuItem>
+                                        <MenuItem value='Engineering'>Engineering</MenuItem>
+                                        <MenuItem value='Human Resources'>Human Resources</MenuItem>
+                                        <MenuItem value='Legal'>Legal</MenuItem>
+                                        <MenuItem value='Marketing'>Marketing</MenuItem>
+                                        <MenuItem value='Sales'>Sales</MenuItem>
+                                    </Select>
+                                    }}
+                                    />
+                                {/* <Select
                                     labelId="demo-simple-select-helper-label"
                                     id="demo-simple-select-helper"
                                     value={companyDepartment}
                                     label="Department *"
                                     onChange={(event) => setCompanyDepartment(event.target.value)}
-                                    
+                                    {...register("companyDepartment")}
                                 >
                                     <MenuItem value="" disabled>None</MenuItem>
                                     <MenuItem value='Engineering'>Engineering</MenuItem>
@@ -292,22 +422,48 @@ export default function NewEmployeeForm() {
                                     <MenuItem value='Legal'>Legal</MenuItem>
                                     <MenuItem value='Marketing'>Marketing</MenuItem>
                                     <MenuItem value='Sales'>Sales</MenuItem>
-                                </Select>
-                                {companyDepartmentError && <FormHelperText>Empty field!</FormHelperText>}
+                                </Select> */}
+                                {<FormHelperText>{errors.companyDepartment?.message}</FormHelperText>}
                             </FormControl>
-                            {/* <Department department = {companyDepartment} setDepartment = {setCompanyDepartment} /> */}
                         </Grid>
                         <Grid item>
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            {/* <Controller 
+                                    name="companyStartDate"
+                                    control={control}
+                                    defaultValue=''
+                                    render={({field}) => {
+                                        return <DesktopDatePicker
+                                        required
+                                        label="Start Date *"
+                                        inputFormat="MM/dd/yyyy"
+                                        value={companyStartDate}
+                                        renderInput={(params) => <TextField {...params} 
+                                        
+                                        onChange={(event) => field.onChange(event.target.value)}
+                                        
+                                        
+                                        />} 
+                                        {...register("companyStartDate", companyStartDateValidators)}
+                                    error={errors.companyStartDate !== undefined}
+                                    helperText={errors.companyStartDate?.message}
+                                        
+                                    />
+                                    }}
+                                    /> */}
                                 <DesktopDatePicker
                                     required
                                     label="Start date *"
                                     inputFormat="MM/dd/yyyy"
                                     value={companyStartDate}
-                                    onChange={handleStartChange}
-                                    onReset={handleStartChange}
-                                    renderInput={(params) => <TextField {...params} error={companyStartDateError}
-                                    helperText={companyStartDateError ? 'Empty field!' : " " } />}
+                                    control={control}
+                                    onChange={(date) => handleStartChange(date)}
+                                    //onReset={handleStartChange}
+                                    renderInput={(params) => <TextField {...params} 
+                                    {...register("companyStartDate", companyStartDateValidators)}
+                                    error={errors.companyStartDate !== undefined}
+                                    helperText={errors.companyStartDate?.message}
+                                    />}
                                 />
                             </LocalizationProvider>
                         </Grid>
@@ -330,7 +486,7 @@ export default function NewEmployeeForm() {
                                           }
                                       }} 
                                       size="large"
-                                      onClick={handleReset}
+                                      /* onClick={handleReset} */
                                       type="reset"
                               >
                                       Reset
@@ -339,7 +495,8 @@ export default function NewEmployeeForm() {
                                 variant="contained" 
                                 startIcon={<PersonAddAlt1Icon />} 
                                 size="large"
-                                onClick={toggleModal}
+                                type="submit"
+                                /* onClick={onSubmit} */
                                 sx={{
                                     backgroundColor: 'rgb(147, 173, 24)', 
                                     '&:hover': {
