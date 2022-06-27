@@ -300,8 +300,17 @@ export default function EmployeeList() {
 
     const requestSearch = (searchedVal) => {
       const filteredRows = rows.filter((row) => {
-        return row.firstName.toLowerCase().includes(searchedVal.toLowerCase());
-      });
+        return (
+          row.firstName.toLowerCase().includes(searchedVal.toLowerCase()) 
+          || row.lastName.toLowerCase().includes(searchedVal.toLowerCase())
+          || row.birthDate.toLowerCase().includes(searchedVal.toLowerCase())
+          || row.addressStreet.toLowerCase().includes(searchedVal.toLowerCase())
+          || row.addressCity.toLowerCase().includes(searchedVal.toLowerCase())
+          || row.addressState.toLowerCase().includes(searchedVal.toLowerCase())
+          || String(row.addressZip).toLowerCase().includes(searchedVal.toLowerCase())
+          || row.companyDepartment.toLowerCase().includes(searchedVal.toLowerCase())
+          || row.companyStartDate.toLowerCase().includes(searchedVal.toLowerCase())
+      )});
       setNewList(filteredRows);
     };
 
