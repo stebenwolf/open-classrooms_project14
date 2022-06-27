@@ -31,7 +31,12 @@ import { Controller, useForm } from "react-hook-form";
 
 export default function NewEmployeeForm() {
 
-    const {reset, register, getValues, handleSubmit, control, formState, formState:{errors, isSubmitSuccessful}} = useForm(
+    
+
+
+    const dispatch = useDispatch();
+
+    const {reset, register, handleSubmit, control, formState, formState:{errors}} = useForm(
          {defaultValues: {
             firstName: undefined,
             lastName: undefined,
@@ -47,8 +52,14 @@ export default function NewEmployeeForm() {
     const onSubmit= (data) => {
         onAddNewEmployeeClicked(data) // we create the employee
         setModal(!modal);
-        console.log(data);
+        /* console.log(data); */
     }
+
+    React.useEffect(() => {
+        if (formState.isSubmitSuccessful) {
+            reset();
+        }
+    }, [formState, reset])
 
     const firstNameValidators = {
         required:{value: true, message:'First name is required!'}
@@ -78,35 +89,21 @@ export default function NewEmployeeForm() {
         required:{value: true, message:'Start date is required!'}
     };
 
-    React.useEffect(() => {
-        if (formState.isSubmitSuccessful) {
-            reset();
-        }
-    }, [formState, reset])
-
-
-    const dispatch = useDispatch();
-
-    // One state for each input field
-    
+    // One state for each date field
     const [birthDate, setBirthDate] = useState(null);
-    
-    //const [addressState, setAddressState] = useState(undefined);
-    
     const [companyStartDate, setCompanyStartDate] = useState(null);
 
-    // One method for each input field
-    
+    // One method for each date field
     const handleDateChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
         setBirthDate(shortenDate);
-        
     }
     const handleStartChange = (date) => {
         const shortenDate = date.toLocaleString('en-GB').split(',').shift().split('/').reverse().join("-");
         setCompanyStartDate(shortenDate);
     }
 
+    // dealing with US States' list grouping
     const stateOptions = states.map((option) => {
         const firstLetter = option.name[0].toUpperCase();
         return {
@@ -123,6 +120,7 @@ export default function NewEmployeeForm() {
     // Managing modal's state
     const [modal, setModal] = useState(false);
 
+    // checks if all inputs are filled
     //console.log(formState.dirtyFields);
     
     return (
@@ -172,7 +170,7 @@ export default function NewEmployeeForm() {
                                     value={birthDate}
                                     control={control}
                                     onChange={handleDateChange}
-                                    renderInput={(params) => 
+                                    renderInput={() =>  // no {params} here otherwise it doesn't render correctly
                                         <TextField 
                                             label="Birth date" 
                                             variant="outlined" 
@@ -225,15 +223,17 @@ export default function NewEmployeeForm() {
                             <Controller 
                               name="addressState"
                               control={control}
+                              defaultValue={""}
                               render={({field}) => 
                                 <Autocomplete
                                   disablePortal
-                                  onClose={() => formState.dirtyFields.addressState = true}
+                                  onChange={(event, selectedState) => field.onChange(selectedState.name+" ("+selectedState.abbreviation+")")}
                                   id="combo-box"
                                   options={stateOptions.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                                   groupBy={(option) => option.firstLetter}
                                   getOptionLabel={(option) => `${option.name} (${option.abbreviation})`}
-                                  defaultValue={field.addressState}
+                                  
+                                  inputValue={field.value}
                                   renderInput={(params) => 
                                     <TextField 
                                         {...params} 
@@ -241,13 +241,12 @@ export default function NewEmployeeForm() {
                                         required
                                         sx={{ m: 1, minWidth: '15ch' }}
                                         {...register("addressState", addressStateValidators)}
-                                        error={errors.addressState !== undefined}
+                                        error={errors.addressState !== (null || undefined)}
                                         helperText={errors.addressState?.message}
                                     />}
                                 />
                                 }
                               /> 
-                            {/* </FormControl> */}
                         </Grid>
                         
                         <Grid item>
@@ -287,10 +286,11 @@ export default function NewEmployeeForm() {
                                     defaultValue=''
                                     render={({field}) => {
                                         return <Select
+                                        required
                                         labelId="demo-simple-select-helper-label"
                                         id="demo-simple-select-helper"
                                         value={field.value}
-                                        label="Department *"
+                                        label="Department"
                                         {...register("companyDepartment", companyDepartmentValidators)}
                                         
                                     >

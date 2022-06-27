@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import SearchBar from 'material-ui-search-bar';
 import { useState } from 'react';
 
-import data from "../assets/data/fakeEmployeess.json";
+import data from "../assets/data/fakeEmployees.json";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -94,7 +94,6 @@ const headCells = [
       label: 'Start Date',
     },
 ];
-  
   
 function EnhancedTableHead(props) {
     const { order, orderBy, onRequestSort } = props;
@@ -198,7 +197,6 @@ export default function EmployeeList() {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-
     // SEARCH
     const [newList, setNewList] = useState(rows);
     const [searched, setSearched] = useState("");
@@ -226,7 +224,7 @@ export default function EmployeeList() {
 
     return (<div className='employeeList'>
 
-        <h1>Current Employees</h1>
+      <h1>Current Employees</h1>
       <Box sx={{ width: '100%', maxWidth: '1200px' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
         <SearchBar 
