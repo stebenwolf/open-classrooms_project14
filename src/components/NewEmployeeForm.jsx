@@ -17,7 +17,8 @@ import { useDispatch } from 'react-redux/es/exports';
 import { setNewEmployee } from '../features/employeeSlice';
 import { addNewEmployee } from '../features/listSlice';
 
-import { Autocomplete, FormHelperText } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import FormHelperText from '@mui/material/FormHelperText';
 import states from "../assets/data/states.json";
 
 import InputLabel from '@mui/material/InputLabel';
@@ -30,9 +31,6 @@ import { Modal } from "@stebenwolf/react-modal";
 import { Controller, useForm } from "react-hook-form";
 
 export default function NewEmployeeForm() {
-
-    
-
 
     const dispatch = useDispatch();
 

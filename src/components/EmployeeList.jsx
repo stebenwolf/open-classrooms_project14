@@ -13,7 +13,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import { visuallyHidden } from '@mui/utils';
+import VisuallyHidden from '@mui/utils/visuallyHidden';
 
 import { useSelector } from "react-redux";
 
@@ -21,6 +21,7 @@ import SearchBar from 'material-ui-search-bar';
 import { useState } from 'react';
 
 import data from "../assets/data/fakeEmployees.json";
+import shortid from 'shortid';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -129,7 +130,7 @@ function EnhancedTableHead(props) {
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
+                  <Box component="span" sx={VisuallyHidden}>
                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                   </Box>
                 ) : null}
@@ -169,7 +170,7 @@ const EnhancedTableToolbar = () => {
     );
 };
 
-export default function EmployeeList() {
+function EmployeeList() {
 
     const allEmployees = useSelector(state => state.currentEmployees.list);
     const rows = [...data, ...allEmployees];
@@ -256,7 +257,7 @@ export default function EmployeeList() {
                         <TableRow
                           hover
                           tabIndex={-1}
-                          key={row.firstName+row.lastName+row.birthDate}
+                          key={shortid.generate()}
                         >                          
                           <TableCell
                             component="th"
@@ -305,3 +306,5 @@ export default function EmployeeList() {
       </div>
     )
 }
+
+export default React.memo(EmployeeList);

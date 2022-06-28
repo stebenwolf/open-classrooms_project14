@@ -10,8 +10,7 @@
     "@mui/material": "^5.8.4",
     "@mui/x-date-pickers": "^5.0.0-alpha.6",
     "@reduxjs/toolkit": "^1.8.2",
-    "@stebenwolf/react-modal": "^1.0.2",
-    "@stebenwolf/stebenwolf-modal-package": "^1.0.153",
+    "@stebenwolf/react-modal": "^1.0.21",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -24,7 +23,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
-    "web-vitals": "^2.1.4"
+    "shortid": "^2.2.16"
   },
   "scripts": {
     "start": "react-scripts start",
